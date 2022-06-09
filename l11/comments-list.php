@@ -3,6 +3,8 @@
 $days = scandir(__DIR__ . '/storage');
 $days = array_filter($days, static fn ($item) => (bool)preg_match('/\d{4}-\d{2}-\d{2}/', $item));
 
+rsort($days);
+
 $result =[];
 foreach ($days as $day) {
     $dir = __DIR__ . '/storage/' . $day;
@@ -22,6 +24,11 @@ foreach ($days as $day) {
 
         $result[$day][$file] = $comment;
     }
+
+    uasort(
+        $result[$day],
+        static fn (array $a, array $b) => $b['time'] <=> $a['time']
+    );
 
 }
 
